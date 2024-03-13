@@ -1,16 +1,34 @@
-# This is a sample Python script.
+from flask import Flask
+import pymysql
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+app = Flask(__name__)
 
+# Configuration de la base de données
+app.config['MYSQLHOST'] = 'localhost' # Adresse IP ou nom d'hôte du serveur MySQL
+app.config['MYSQLUSER'] = 'root'  # Nom d'utilisateur MySQL
+app.config['MYSQLPASSWORD'] = ''  # Mot de passe MySQL
+app.config['MYSQL_DB'] = 'rama_adrian_expi1a_i164'  # Nom de la base de données
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+# Établir une connexion à la base de données
+conn = pymysql.connect(host=app.config['MYSQLHOST'],
+                       user=app.config['MYSQLUSER'],
+                       password=app.config['MYSQLPASSWORD'],
+                       database=app.config['MYSQL_DB'])
 
+# Créer un curseur pour exécuter des requêtes SQL
+cursor = conn.cursor()
 
-# Press the green button in the gutter to run the script.
+# Exemple : exécution d'une requête pour récupérer toutes les lignes d'une table nommée 'ma_table'
+cursor.execute("SELECT * FROM applications")
+rows = cursor.fetchall()
+
+# Parcourir les résultats
+for row in rows:
+    print("fait chier ce module",row)
+
+# Fermer le curseur et la connexion à la base de données
+cursor.close()
+conn.close()
+
 if __name__ == '__main__':
-    print_hi('Adrian')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    app.run()
